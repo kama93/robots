@@ -1,26 +1,53 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react';
+import { connect } from 'react-redux'
+import CardList from './CardList';
+import SearchBox from './SearchBox'
+import Scroll from './Scroll'
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import {setSearchField, requestRobots} from './actions.js';
+
+const mapStateToProps=(state)=>{
+    return{
+        searchField: state.serachRobots.searchField,
+        robots: state.requestRobots.robots,
+        isPending: state.requestRobots.isPending,
+        error:state.requestRobots.error
+
+    }
 }
 
-export default App;
+const mapDispatchToProps=(dispatch)=>{
+    return {
+        onSearchChange: (event)=> dispatch (setSearchField(event.target.value)),
+        onRequestRobots:()=> dispatch(requestRobots())
+    }
+}
+
+
+class App extends Component {
+   
+     componentDidMount(){
+        this.props.onRequestRobots();
+    }
+
+    render (){
+        const {searchField, onSearchChange, robots, isPending}= this.props;
+        const filterRobots= robots.filter(robots=>{
+            return robots.name.toLowerCase().includes(searchField.toLowerCase());
+        })
+        return isPending?
+             <h1>Loading</h1>:
+            (
+            <div className='tc'>
+            <h1 className='title'> Robofriends </h1>
+            <SearchBox searchChange={onSearchChange}/>
+            <Scroll>
+                <CardList robots={filterRobots}/>
+            </Scroll>
+            </div>
+            )
+
+}
+} 
+export default connect(mapStateToProps, mapDispatchToProps)(App)
