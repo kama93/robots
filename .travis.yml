@@ -1,0 +1,14 @@
+language: generic
+
+services:
+  - docker
+
+env:
+  global:
+    secure: grEMU+frYQFvXBVMswA1jtQulp0SZinpmpzPXCKh5hTRDgA8FOKzPBEmBG81jiA/53uWJIwLIiZyriq1zqMhB6cOomSjud3DTNRG8n+YYCcqwegI1rTMxjlo1jJJBjbHbd/0/F0/TDGRbLM7xZpBxoTHCGcxvVfVGl/3umM0yArSTKjubZ/I6RTvrmvnHDLzphSACnO6lLH//Lj9f0gYdn7xI/t94pPyipYbXYqnqOlEcpV1LCzUH8QoFjquY5pdR94MwlLyvrp9fcecwLV6TGnugUJu0p0thQSynZBqu99BHHxuCi5+wHGQjvlR2eiHqvtIQxzS1MKIYrktnnmg1u9Hk63TlHLAnJZyrIN97hp+a9/lkcMdC+wf0ge3mCnozK9lmSAXxxPoe7PAIOgoXVlUk+ZyW59qnuIgQLR1yNehRKhexOFNHfomZRqGMo+O4OGYDh+tcKtl3exPfwlyIyJ2sk9wlL1XKDRCzjrmmqwSsknUTD3UqYOQyLs8UEaQmO/kTODRFjejN2/eOkAbASha6P59ScZm69OSpRR2t05Tko+tJqOwFDGrSaD7kfJXmVKGP4BhY+GL7gk2uXoqmw33edeL7SqSyeD3SG0GyC/EnRl0egi9etBH34yxiVE8R41K5jS/FVTFQgR84/SXpk1FnaBHuwYC46gLCBYYLnE=
+
+script:
+- docker build -t kama93/robots:latest .
+- docker images
+- echo "$DOCKER_TOKEN" | docker login -u kama93 --password-stdin
+- docker push kama93/robots:latest
